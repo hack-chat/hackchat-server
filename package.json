@@ -20,8 +20,8 @@
     "generate": "node src/scripts/generate.js",
     "lint": "eslint --ignore-path .gitignore .",
     "lintfix": "eslint --fix --ignore-path .gitignore .",
-    "postinstall" : "npx hackchat-server config",
-    "report-coverage": "c8 report --reporter=text-lcov > coverage.lcov && codecov -t <APIKEYHERE>",
+    "postinstall": "npx hackchat-server config",
+    "report-coverage": "c8 report --reporter=text-lcov > coverage.lcov && codecov -t 5aede630-04ba-47df-b75f-020179a7236a",
     "start": "node -r esm main.js",
     "test": "npm run lint && c8 mocha --exit ./test/*.test.js"
   },
