@@ -1,0 +1,12 @@
+{
+  "modulesPath": "./commands",
+
+  "websocketPort": 7070,
+
+  "rateLimit": {
+    "halflife": 30000,
+    "threshold": 25
+  },
+
+  "pulseSpeed": 16000
+}

@@ -1,0 +1,23 @@
+{
+  "errors": {
+    "missingConfig": "Missing .hcserver.json, have you run: npx hackchat-server config",
+    "badConfig": "Failed to load .hcserver.json, rebuild with: npx hackchat-server config"
+  },
+  "config": {
+    "configMode": "Configuration mode:",
+    "configModeSimple": "Simple",
+    "configModeAdvanced": "Advanced",
+    "configName": "Configuration file name:",
+    "cmdDirName": "Commands directory path:",
+    "serverPort": "Server port:",
+    "rlHalflife": "Ratelimit halflife:",
+    "rlThreshold": "Ratelimit threshold:",
+    "pingSpeed": "Millisecond ping interval:",
+    "savePathInfo": "Saving configuration file as:",
+    "existsWarning": "File already exists, overwrite?",
+    "writeAborted": "Aborted without creating config file. . .",
+    "writeSuccess": "Config file created!",
+    "writeFailure": "FAILED to create the config file:",
+    "createDir": "Commands directory does not exist, create it now?"
+  }
+}

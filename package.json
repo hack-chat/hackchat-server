@@ -1,0 +1,48 @@
+{
+  "name": "hackchat-server",
+  "version": "2.2.1",
+  "description": "A module-based websocket relay server",
+  "main": "index.js",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hack-chat/hackchat-server.git"
+  },
+  "engines": {
+    "node": ">= 14.10.0",
+    "npm": ">= 7.0.0"
+  },
+  "scripts": {
+    "config": "node -r esm src/scripts/configure.js",
+    "cov": "c8 report",
+    "cov:ls": "c8 report --reporter=text",
+    "cov:html": "c8 report --reporter=html && http-server ./.coverage",
+    "generate": "node src/scripts/generate.js",
+    "lint": "eslint --ignore-path .gitignore .",
+    "lintfix": "eslint --fix --ignore-path .gitignore .",
+    "postinstall" : "npx hackchat-server config",
+    "report-coverage": "c8 report --reporter=text-lcov > coverage.lcov && codecov -t <APIKEYHERE>",
+    "start": "node -r esm main.js",
+    "test": "npm run lint && c8 mocha --exit ./test/*.test.js"
+  },
+  "author": "Marzavec",
+  "license": "MIT",
+  "dependencies": {
+    "didyoumean2": "^4.1.0",
+    "enquirer": "^2.3.6",
+    "esm": "^3.2.25",
+    "fs-extra": "^8.1.0",
+    "ws": "^7.5.3",
+    "yargs": "^17.1.1"
+  },
+  "devDependencies": {
+    "@istanbuljs/esm-loader-hook": "^0.1.2",
+    "c8": "^7.6.0",
+    "chai": "^4.3.3",
+    "codecov": "^3.8.1",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.20.0",
+    "mocha": "^8.3.1",
+    "nyc": "^15.1.0"
+  }
+}
