@@ -59,7 +59,7 @@ class CoreApp {
   async init() {
     this.i18n = await this.loadLanguage();
     this.config = await this.loadConfig();
-    
+
     this.buildCommandsManager();
     this.buildStatsManager();
     this.buildMainServer();
@@ -73,11 +73,11 @@ class CoreApp {
   async loadLanguage() {
     let langPath = `${dirname(__dirname)}${sep}translations${sep}${this.coreOptions.lang}.json`;
     const exists = await pathExists(langPath);
-    
+
     if (exists === false) {
       throw new Error(`Cannot find translation file: ${langPath}`);
     }
-    
+
     try {
       return await readJson(langPath);
     } catch (err) {
@@ -121,7 +121,7 @@ class CoreApp {
     * @return {void}
     */
   buildStatsManager() {
-    this.stats = new StatsManager(this);
+    this.stats = new StatsManager();
     this.stats.set('start-time', process.hrtime());
   }
 
