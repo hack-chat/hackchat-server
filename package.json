@@ -12,15 +12,16 @@
     "node": ">= 14.10.0",
     "npm": ">= 7.0.0"
   },
+  "bin": {
+    "config": "scripts/configure.js",
+    "generate": "scripts/generate.js"
+  },
   "scripts": {
-    "config": "node -r esm ./scripts/configure.js",
     "cov": "c8 report",
     "cov:ls": "c8 report --reporter=text",
     "cov:html": "c8 report --reporter=html && http-server ./.coverage",
-    "generate": "node -r esm ./scripts/generate.js",
     "lint": "eslint --ignore-path .gitignore .",
     "lintfix": "eslint --fix --ignore-path .gitignore .",
-    "postinstall": "node -r esm ./scripts/configure.js",
     "report-coverage": "c8 report --reporter=text-lcov > coverage.lcov && codecov -t 5aede630-04ba-47df-b75f-020179a7236a",
     "start": "node -r esm main.js",
     "test": "npm run lint && c8 mocha --exit ./test/*.test.js"

@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 /**
   * This setup script creates a config file that will be used by the server.
   * It allows a user to specify the port, command modules path, and other options.
@@ -92,7 +94,7 @@ const buildQuestions = (i18n, advancedMode) => {
 const finalize = async (i18n, data) => {
   console.log('');
 
-  const configPath = `${dirname(__dirname)}${sep}${data.configName}`;
+  const configPath = `${process.cwd()}${sep}${data.configName}`;
   console.log(i18n.savePathInfo);
   console.log(configPath);
   console.log('');
@@ -133,7 +135,7 @@ const finalize = async (i18n, data) => {
 
 // Create the target command modules directory, if needed
 const createModulesDirectory = async (path, i18n) => {
-  const modulesPath = `${dirname(__dirname)}${sep}${path}${sep}`;
+  const modulesPath = `${process.cwd()}${sep}${path}${sep}`;
   const exists = await pathExists(modulesPath);
 
   if (exists === false) {
