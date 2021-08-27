@@ -56,6 +56,8 @@ server.init();
 - [Documentation](https://github.com/hack-chat/hackchat-server)
 - [GitHub](https://github.com/hack-chat/hackchat-server)
 - [NPM](https://www.npmjs.com/package/hackchat-server)
+- [Contributors](https://github.com/hack-chat/main/graphs/contributors) :heart:
+- [Legacy Contributors](https://github.com/AndrewBelt/hack.chat/graphs/contributors) :heart:
 
 ## Contributing
 

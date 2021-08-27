@@ -1,7 +1,7 @@
 {
   "errors": {
-    "missingConfig": "Missing .hcserver.json, have you run: npx hackchat-server config",
-    "badConfig": "Failed to load .hcserver.json, rebuild with: npx hackchat-server config"
+    "missingConfig": "Missing .hcserver.json, have you run: npx -p hackchat-server config",
+    "badConfig": "Failed to load .hcserver.json, rebuild with: npx -p hackchat-server config"
   },
   "config": {
     "configMode": "Configuration mode:",
@@ -19,5 +19,27 @@
     "writeSuccess": "Config file created!",
     "writeFailure": "FAILED to create the config file:",
     "createDir": "Commands directory does not exist, create it now?"
+  },
+  "generate": {
+    "requiredText": "<REQUIRED>",
+    "nameLabel": "Module Name",
+    "categoryLabel": "Module Category",
+    "cmdLabel": "Command Name",
+    "descriptionLabel": "Description",
+    "usageLabel": "Usage Info",
+    "requiredLabel": "Required Props",
+    "hooksLabel": "Hooks",
+    "initLabel": "Requires Initialization",
+    "choiceLabel": "Options:",
+    "setNameLabel": "Set Name",
+    "setCategoryLabel": "Set Category",
+    "setCmdLabel": "Set Command Name",
+    "setDescLabel": "Set Description",
+    "setUsageLabel": "Set Usage Info",
+    "setReqPropsLabel": "Set Required Payload Properties",
+    "setHooksLabel": "Add New Hook",
+    "setInitLabel": "Toggle Init Hook",
+    "saveLabel": "Save Module",
+    "cancelLabel": "Cancel"
   }
 }
