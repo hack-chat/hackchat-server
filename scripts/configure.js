@@ -3,7 +3,7 @@
 /**
   * This setup script creates a config file that will be used by the server.
   * It allows a user to specify the port, command modules path, and other options.
-  * 
+  *
   * Script arguments:
   * --lang - Specify the translation file to use, example: --lang=de
   */
@@ -40,7 +40,7 @@ const loadLanguage = async (lang) => {
 // Compile and return the list of questions using the language data
 const buildQuestions = (i18n, advancedMode) => {
   const questions = [];
-  
+
   questions.push({
     type: 'input',
     name: 'configName',
@@ -172,7 +172,7 @@ const start = async () => {
   const advancedMode = mode === i18n.config.configModeAdvanced ? false : true;
 
   const questions = buildQuestions(i18n.config, advancedMode);
-  let answers = await prompt(questions);
+  const answers = await prompt(questions);
 
   await finalize(i18n.config, answers);
   await createModulesDirectory(answers.modulesPath, i18n.config);

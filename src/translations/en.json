@@ -36,10 +36,22 @@
     "setCmdLabel": "Set Command Name",
     "setDescLabel": "Set Description",
     "setUsageLabel": "Set Usage Info",
-    "setReqPropsLabel": "Set Required Payload Properties",
+    "setReqPropsLabel": "Add Required Command Property",
     "setHooksLabel": "Add New Hook",
     "setInitLabel": "Toggle Init Hook",
     "saveLabel": "Save Module",
-    "cancelLabel": "Cancel"
+    "cancelLabel": "Cancel",
+    "inputName": "Enter command name",
+    "inputCategory": "Enter category name",
+    "inputCmd": "Enter command name",
+    "inputDesc": "Enter module description",
+    "inputUsage": "Enter module help information",
+    "inputRequiredData": "Enter new required command property",
+    "inputHookType": "Are you hooking incoming or outgoing payloads?",
+    "inputHookIncoming": "Incoming",
+    "inputHookOutgoing": "Outgoing",
+    "inputHookName": "Give the hook function a name",
+    "inputHookPriority": "What priority does the hook have (1 = highest)",
+    "inputInit": "Does your app need to be initialized when the server starts?"
   }
 }
