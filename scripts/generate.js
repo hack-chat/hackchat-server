@@ -14,7 +14,7 @@ import { dirname, sep } from 'path';
 import { fileURLToPath } from 'url';
 
 import enquirerPkg from 'enquirer';
-const { prompt, Select, Confirm } = enquirerPkg;
+const { Input, Select, Confirm } = enquirerPkg;
 
 import pkg from 'fs-extra';
 const { pathExists, readJson, writeJson, mkdirSync } = pkg;
@@ -57,17 +57,22 @@ const loadConfig = async (configFile, i18n) => {
 
 // Save new config settings as a json file
 const finalize = async (data, i18n) => {
-  /*console.log('');
-
-  const configPath = `${process.cwd()}${debugMode ? `${sep}..` : ''}${sep}${data.configName}`;
-  console.log(i18n.savePathInfo);
-  console.log(configPath);
   console.log('');
 
-  const exists = await pathExists(configPath);
+  const rootDir = `${process.cwd()}${debugMode ? `${sep}..` : ''}${sep}`;
+  const cmdPath = `${rootDir}${currentConfig.modulesPath}`;
+  const categoryPath = `${cmdPath}${sep}${data.category}`;
+  const filePath = `${categoryPath}${sep}${data.commandName}.js`;
+
+  createCategoryDirectory(cmdPath);
+  createCategoryDirectory(categoryPath);
+
+  console.log(filePath);
+
+  const exists = await pathExists(filePath);
 
   if (exists === true) {
-    const prompt = new Confirm({
+    /*const prompt = new Confirm({
       name: 'overwrite',
       message: i18n.existsWarning,
     });
@@ -76,31 +81,13 @@ const finalize = async (data, i18n) => {
       console.log('');
       console.log(i18n.writeAborted);
       process.exit();
-    }
+    }*/
   }
-
-  const configData = {
-    modulesPath: data.modulesPath,
-    websocketPort: data.websocketPort,
-    rateLimit: {
-      halflife: data.halflife,
-      threshold: data.threshold,
-    },
-    pulseSpeed: data.pulseSpeed,
-  };
-
-  try {
-    await writeJson(configPath, configData);
-    console.log(i18n.writeSuccess);
-  } catch (err) {
-    console.error(i18n.writeFailure);
-    console.error(err);
-  }*/
 }
 
 // Create the target command category directory, if needed
-const createCategoryDirectory = async (path, i18n) => {
-  const modulesPath = `${process.cwd()}${debugMode ? `${sep}..` : ''}${sep}${path}${sep}`;
+const createCategoryDirectory = async (path) => {
+  const modulesPath = `${path}${sep}`;
   const exists = await pathExists(modulesPath);
 
   if (exists === false) {
@@ -138,84 +125,82 @@ const showMainMenu = async (outputModule, i18n) => {
 
   const choice = await menuPrompt.run();
 
-  let answer;
-
   switch(choice) {
     case i18n.setNameLabel:
       lastMenu = 0;
 
-      answer = await prompt({
+      const namePrompt = new Input({
         type: 'input',
         name: 'name',
         message: i18n.inputName,
         initial: outputModule.commandName === i18n.requiredText ? '' : outputModule.commandName,
       });
-
-      outputModule.commandName = answer.name;
+      
+      outputModule.commandName = await namePrompt.run();
       showMainMenu(outputModule, i18n);
       break;
     case i18n.setCategoryLabel:
       lastMenu = 1;
 
-      answer = await prompt({
+      const catPrompt = new Input({
         type: 'input',
         name: 'category',
         message: i18n.inputCategory,
         initial: outputModule.category === '""' ? '' : outputModule.category,
       });
 
-      outputModule.category = answer.category;
+      outputModule.category = await catPrompt.run();
       showMainMenu(outputModule, i18n);
       break;
     case i18n.setCmdLabel:
       lastMenu = 2;
 
-      answer = await prompt({
+      const cmdPrompt = new Input({
         type: 'input',
         name: 'cmd',
         message: i18n.inputCmd,
         initial: outputModule.commandName === i18n.requiredText ? outputModule.commandName : outputModule.commandName,
       });
 
-      outputModule.info.name = answer.cmd;
+      outputModule.info.name = await cmdPrompt.run();
       showMainMenu(outputModule, i18n);
       break;
     case i18n.setDescLabel:
       lastMenu = 3;
 
-      answer = await prompt({
+      const descPrompt = new Input({
         type: 'input',
         name: 'desc',
         message: i18n.inputDesc,
         initial: outputModule.info.description === '""' ? '' : outputModule.info.description,
       });
 
-      outputModule.info.description = answer.desc;
+      outputModule.info.description = await descPrompt.run();
       showMainMenu(outputModule, i18n);
       break;
     case i18n.setUsageLabel:
       lastMenu = 4;
 
-      answer = await prompt({
+      const usagePrompt = new Input({
         type: 'input',
         name: 'usage',
         message: i18n.inputUsage,
         initial: outputModule.info.usage === '""' ? '' : outputModule.info.usage,
       });
 
-      outputModule.info.usage = answer.usage;
+      outputModule.info.usage = await usagePrompt.run();
       showMainMenu(outputModule, i18n);
       break;
     case i18n.setReqPropsLabel:
       lastMenu = 5;
 
-      answer = await prompt({
+      const reqPropPrompt = new Input({
         type: 'input',
         name: 'requiredData',
         message: i18n.inputRequiredData,
       });
 
-      outputModule.requiredData.push(answer.requiredData);
+      outputModule.requiredData.push(await reqPropPrompt.run());
       showMainMenu(outputModule, i18n);
       break;
     case i18n.setHooksLabel:
@@ -225,7 +210,7 @@ const showMainMenu = async (outputModule, i18n) => {
         type: 'in',
         name: '',
         priority: 35,
-      }
+      };
 
       const typePromp = new Select({
         name: 'typePromp',
@@ -238,30 +223,31 @@ const showMainMenu = async (outputModule, i18n) => {
 
       newHook.type = (await typePromp.run()) === i18n.inputHookIncoming ? 'in' : 'out';
 
-      // Tharr be bugs here >:(
-      newHook.name = (await prompt({
+      const hookNamePrompt = new Input({
         type: 'input',
         name: 'name',
         message: i18n.inputHookName,
-      })).name;
+      });
+      newHook.name = (await hookNamePrompt.run());
 
-      newHook.priority = (await prompt({
+      const hookPrioPrompt = new Input({
         type: 'input',
         name: 'priority',
         message: i18n.inputHookPriority,
-      })).priority;
-
-      console.log(newHook);
-
+      });
+      newHook.priority = (await hookPrioPrompt.run());
+      
+      outputModule.hooks.push(newHook);
+      showMainMenu(outputModule, i18n);
       break;
     case i18n.setInitLabel:
       lastMenu = 7;
-      const prompt = new Confirm({
+      const initPrompt = new Confirm({
         name: 'init',
         message: i18n.inputInit,
       });
 
-      outputModule.requireInit = await prompt.run();
+      outputModule.requireInit = await initPrompt.run();
       showMainMenu(outputModule, i18n);
       break;
     case i18n.saveLabel:
@@ -283,7 +269,7 @@ const outputModuleInfo = (outputModule, i18n) => console.log(`
   \x1b[35m${i18n.descriptionLabel}:\x1b[0m ${outputModule.info.description}
   \x1b[35m${i18n.usageLabel}:\x1b[0m ${outputModule.info.usage}
   \x1b[35m${i18n.requiredLabel}:\x1b[0m ['${outputModule.requiredData.join("', '")}']
-  \x1b[35m${i18n.hooksLabel}:\x1b[0m ${outputModule.hooks}
+  \x1b[35m${i18n.hooksLabel}:\x1b[0m ${outputModule.hooks.length}
   \x1b[35m${i18n.initLabel}:\x1b[0m ${outputModule.requireInit}
 `);
 
@@ -305,7 +291,7 @@ const start = async () => {
       usage: '""',
     },
     requiredData: [],
-    hooks: 0,
+    hooks: [],
     requireInit: false,
   }
 
