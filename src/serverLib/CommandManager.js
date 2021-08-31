@@ -238,7 +238,7 @@ class CommandManager {
     * @return {*} Arbitrary module return data
     */
   handleFail(server, socket, data) {
-    const maybe = didYouMean.default(data.cmd, this.all().map((c) => c.info.name), {
+    const maybe = didYouMean(data.cmd, this.all().map((c) => c.info.name), {
       threshold: 5,
       thresholdType: 'edit-distance',
     });

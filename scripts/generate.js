@@ -222,7 +222,7 @@ const showMainMenu = async (outputModule, i18n) => {
   const choice = await menuPrompt.run();
 
   switch(choice) {
-    case i18n.setNameLabel:
+    case i18n.setNameLabel: {
       lastMenu = 0;
 
       const namePrompt = new Input({
@@ -235,7 +235,8 @@ const showMainMenu = async (outputModule, i18n) => {
       outputModule.commandName = await namePrompt.run();
       showMainMenu(outputModule, i18n);
       break;
-    case i18n.setCategoryLabel:
+    }
+    case i18n.setCategoryLabel: {
       lastMenu = 1;
 
       const catPrompt = new Input({
@@ -248,7 +249,8 @@ const showMainMenu = async (outputModule, i18n) => {
       outputModule.category = await catPrompt.run();
       showMainMenu(outputModule, i18n);
       break;
-    case i18n.setCmdLabel:
+    }
+    case i18n.setCmdLabel: {
       lastMenu = 2;
 
       const cmdPrompt = new Input({
@@ -261,7 +263,8 @@ const showMainMenu = async (outputModule, i18n) => {
       outputModule.info.name = await cmdPrompt.run();
       showMainMenu(outputModule, i18n);
       break;
-    case i18n.setDescLabel:
+    }
+    case i18n.setDescLabel: {
       lastMenu = 3;
 
       const descPrompt = new Input({
@@ -274,7 +277,8 @@ const showMainMenu = async (outputModule, i18n) => {
       outputModule.info.description = await descPrompt.run();
       showMainMenu(outputModule, i18n);
       break;
-    case i18n.setUsageLabel:
+    }
+    case i18n.setUsageLabel: {
       lastMenu = 4;
 
       const usagePrompt = new Input({
@@ -287,7 +291,8 @@ const showMainMenu = async (outputModule, i18n) => {
       outputModule.info.usage = await usagePrompt.run();
       showMainMenu(outputModule, i18n);
       break;
-    case i18n.setReqPropsLabel:
+    }
+    case i18n.setReqPropsLabel: {
       lastMenu = 5;
 
       const reqPropPrompt = new Input({
@@ -299,7 +304,8 @@ const showMainMenu = async (outputModule, i18n) => {
       outputModule.requiredData.push(await reqPropPrompt.run());
       showMainMenu(outputModule, i18n);
       break;
-    case i18n.setHooksLabel:
+    }
+    case i18n.setHooksLabel: {
       lastMenu = 6;
 
       const newHook = {
@@ -336,7 +342,8 @@ const showMainMenu = async (outputModule, i18n) => {
       outputModule.hooks.push(newHook);
       showMainMenu(outputModule, i18n);
       break;
-    case i18n.setInitLabel:
+    }
+    case i18n.setInitLabel: {
       lastMenu = 7;
       const initPrompt = new Confirm({
         name: 'init',
@@ -346,15 +353,18 @@ const showMainMenu = async (outputModule, i18n) => {
       outputModule.requireInit = await initPrompt.run();
       showMainMenu(outputModule, i18n);
       break;
-    case i18n.saveLabel:
+    }
+    case i18n.saveLabel: {
       finalize(outputModule, i18n);
       break;
-    case i18n.cancelLabel:
+    }
+    case i18n.cancelLabel: {
       // Okthnxbai
       break;
-
-    default:
+    }
+    default: {
       showMainMenu(outputModule, i18n);
+    }
   }
 }
 

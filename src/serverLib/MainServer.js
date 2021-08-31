@@ -1,8 +1,7 @@
 /* eslint no-bitwise: 0 */
 /* eslint no-console: 0 */
 
-import pkg from 'ws';
-const { Server: WsServer, OPEN: SocketReady } = pkg;
+import WebSocket, { WebSocketServer } from 'ws';
 import { createHash } from 'crypto';
 import RateLimiter from './RateLimiter.js';
 
@@ -14,7 +13,7 @@ import RateLimiter from './RateLimiter.js';
   * @version v2.0.0
   * @license WTFPL ( http://www.wtfpl.net/txt/copying/ )
   */
-class MainServer extends WsServer {
+class MainServer extends WebSocketServer {
   /**
     * Create a HackChat server instance
     * @param {CoreApp} core Reference to the global core object
@@ -110,7 +109,7 @@ class MainServer extends WsServer {
     }
 
     for (let i = 0, l = targetSockets.length; i < l; i += 1) {
-      if (targetSockets[i].readyState === SocketReady) {
+      if (targetSockets[i].readyState === WebSocket.OPEN) {
         targetSockets[i].ping();
       }
     }
@@ -279,7 +278,7 @@ class MainServer extends WsServer {
       return;
     }
 
-    if (socket.readyState === SocketReady) {
+    if (socket.readyState === WebSocket.OPEN) {
       socket.send(JSON.stringify(outgoingPayload));
     }
   }
