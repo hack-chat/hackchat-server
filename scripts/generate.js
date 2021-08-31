@@ -121,7 +121,7 @@ export function init(core) {
 
 }
 
-`
+`;
   }
 
   if (outputModule.hooks.length) {
