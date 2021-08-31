@@ -17,12 +17,12 @@ import enquirerPkg from 'enquirer';
 const { Input, Select, Confirm } = enquirerPkg;
 
 import pkg from 'fs-extra';
-const { pathExists, readJson, writeJson, mkdirSync } = pkg;
+const { pathExists, readJson, writeFileSync, mkdirSync } = pkg;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 let currentConfig = false;
-let debugMode = true;
+let debugMode = false;
 
 // Load and return target language
 const loadLanguage = async (lang) => {
@@ -56,37 +56,133 @@ const loadConfig = async (configFile, i18n) => {
 }
 
 // Save new config settings as a json file
-const finalize = async (data, i18n) => {
+const finalize = async (outputModule, i18n) => {
   console.log('');
 
   const rootDir = `${process.cwd()}${debugMode ? `${sep}..` : ''}${sep}`;
   const cmdPath = `${rootDir}${currentConfig.modulesPath}`;
-  const categoryPath = `${cmdPath}${sep}${data.category}`;
-  const filePath = `${categoryPath}${sep}${data.commandName}.js`;
+  const categoryPath = `${cmdPath}${sep}${outputModule.category}`;
+  const filePath = `${categoryPath}${sep}${outputModule.commandName}.js`;
 
-  createCategoryDirectory(cmdPath);
-  createCategoryDirectory(categoryPath);
+  createDirectory(cmdPath);
+  createDirectory(categoryPath);
 
   console.log(filePath);
 
   const exists = await pathExists(filePath);
 
   if (exists === true) {
-    /*const prompt = new Confirm({
+    const prompt = new Confirm({
       name: 'overwrite',
       message: i18n.existsWarning,
     });
 
     if (await prompt.run() === false) {
-      console.log('');
-      console.log(i18n.writeAborted);
-      process.exit();
-    }*/
+      return showMainMenu(outputModule, i18n);
+    }
   }
+
+  const moduleString = moduleToString(outputModule);
+
+  writeFileSync(filePath, moduleString);
+  console.log(i18n.writeSuccess);
+}
+
+//
+const moduleToString = (outputModule) => {
+  let moduleString = `/**
+  * @author
+  * @summary
+  * @version 1.0.0
+  * @description ${outputModule.info.description}
+  * @module ${outputModule.info.name}
+  */
+
+/**
+  * Executes when invoked by a remote client
+  * @param {Object} env - Enviroment object with references to core, server, socket & payload
+  * @public
+  * @return {void}
+  */
+export async function run({
+  core, server, socket, payload,
+}) {
+
+}\n\n`;
+
+  if (outputModule.requireInit) {
+    moduleString += `/**
+  * Automatically executes once after server is ready
+  * @param {Object} core - Reference to core enviroment object
+  * @public
+  * @return {void}
+  */
+export function init(core) {
+
+}
+
+`
+  }
+
+  if (outputModule.hooks.length) {
+    let registerBlock = `/**
+  * Automatically executes once after server is ready to register this modules hooks
+  * @param {Object} server - Reference to server enviroment object
+  * @public
+  * @return {void}
+  */
+export function initHooks(server) {
+`;
+    let functionBlock = '';
+    let functionName;
+    for (let i = 0, j = outputModule.hooks.length; i < j; i++) {
+      functionName = `${outputModule.hooks[i].name}Hook`;
+
+      registerBlock += `  server.registerHook('${outputModule.hooks[i].type}', '${outputModule.hooks[i].name}', this.${functionName}.bind(this), ${outputModule.hooks[i].priority});\n`;
+      functionBlock += `/**
+  * Executes every time an ${outputModule.hooks[i].type === 'in' ? 'incoming' : 'outgoing'} ${outputModule.hooks[i].name} command is invoked
+  * @param {Object} env - Enviroment object with references to core, server, socket & payload
+  * @public
+  * @return {{Object|boolean|string}} Object = same/altered payload, false = suppress action, string = error
+  */
+export function ${functionName}({
+  core, server, socket, payload,
+}) {
+
+}`;
+    }
+
+    moduleString += `${registerBlock}}\n\n${functionBlock}\n\n`;
+  }
+
+  moduleString += `/**
+  * The following payload properties are required to invoke this module:
+  * "${outputModule.requiredData.join('", "')}"
+  * @public
+  * @typedef {Array} ${outputModule.info.name}/requiredData
+  */
+export const requiredData = ['${outputModule.requiredData.join("', '")}'];\n\n`;
+
+  moduleString += `/**
+  * The following payload properties are required to invoke this module:
+  * "${outputModule.requiredData.join('", "')}"
+  * @public
+  * @typedef {Object} ${outputModule.info.name}/info
+  * @property {string} name - Module command name
+  * @property {string} description - Information about module
+  * @property {string} usage - Information about module usage
+  */
+export const info = {
+  name: '${outputModule.info.name}',
+  description: '${outputModule.info.description}',
+  usage: \`${outputModule.info.usage}\`,
+};`;
+
+  return moduleString;
 }
 
 // Create the target command category directory, if needed
-const createCategoryDirectory = async (path) => {
+const createDirectory = async (path) => {
   const modulesPath = `${path}${sep}`;
   const exists = await pathExists(modulesPath);
 
@@ -135,7 +231,7 @@ const showMainMenu = async (outputModule, i18n) => {
         message: i18n.inputName,
         initial: outputModule.commandName === i18n.requiredText ? '' : outputModule.commandName,
       });
-      
+
       outputModule.commandName = await namePrompt.run();
       showMainMenu(outputModule, i18n);
       break;
@@ -236,7 +332,7 @@ const showMainMenu = async (outputModule, i18n) => {
         message: i18n.inputHookPriority,
       });
       newHook.priority = (await hookPrioPrompt.run());
-      
+
       outputModule.hooks.push(newHook);
       showMainMenu(outputModule, i18n);
       break;

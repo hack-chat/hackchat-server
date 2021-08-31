@@ -50,8 +50,10 @@
     "inputHookType": "Are you hooking incoming or outgoing payloads?",
     "inputHookIncoming": "Incoming",
     "inputHookOutgoing": "Outgoing",
-    "inputHookName": "Give the hook function a name",
+    "inputHookName": "Enter target command name",
     "inputHookPriority": "What priority does the hook have (1 = highest)",
-    "inputInit": "Does your app need to be initialized when the server starts?"
+    "inputInit": "Does your app need to be initialized when the server starts?",
+    "existsWarning": "File already exists, overwrite?",
+    "writeSuccess": "Module file created!"
   }
 }
