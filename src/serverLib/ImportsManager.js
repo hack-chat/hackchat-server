@@ -103,7 +103,7 @@ class ImportsManager {
     this.imports = [];
     let errorText = '';
 
-    const tempImports = `${this.basePath}.${Math.random().toString(36).substring(7)}`;
+    const tempImports = `${this.basePath.substr(0, this.basePath.length - 1)}.${Math.random().toString(36).substring(7)}`;
     renameSync(this.basePath, tempImports);
 
     errorText += await this.loadDir(tempImports);
