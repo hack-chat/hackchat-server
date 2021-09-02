@@ -55,7 +55,9 @@ class ImportsManager {
       if (stat.isDirectory()){
         out = out.concat(this.gatherFiles(filename, filter));
       } else if (filename.indexOf(filter) >= 0) {
-        out.push(filename);
+        if (filename.split('\\').pop().split('/').pop()[0] !== '_') {
+          out.push(filename);
+        }
       }
     }
 
