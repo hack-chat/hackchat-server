@@ -164,8 +164,7 @@ export function ${functionName}({
 export const requiredData = ['${outputModule.requiredData.join("', '")}'];\n\n`;
 
   moduleString += `/**
-  * The following payload properties are required to invoke this module:
-  * "${outputModule.requiredData.join('", "')}"
+  * Module meta information
   * @public
   * @typedef {Object} ${outputModule.info.name}/info
   * @property {string} name - Module command name

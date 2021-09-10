@@ -152,6 +152,13 @@ const createModulesDirectory = async (path, i18n) => {
   }
 }
 
+// Ask which standard modules should be automagically imported
+const importStandardModules = async (path, i18n) => {
+  /**
+    * @todo Actually, this might just end up as it's own script
+    */
+}
+
 // Script main
 const start = async () => {
   const argv = yargs(hideBin(process.argv)).argv;
@@ -176,6 +183,7 @@ const start = async () => {
 
   await finalize(i18n.config, answers);
   await createModulesDirectory(answers.modulesPath, i18n.config);
+  await importStandardModules(answers.modulesPath, i18n.config);
 }
 
 // Start script
