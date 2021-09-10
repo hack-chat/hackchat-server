@@ -1,7 +1,7 @@
 {
   "errors": {
-    "missingConfig": "Missing .hcserver.json, have you run: npx -p hackchat-server config",
-    "badConfig": "Failed to load .hcserver.json, rebuild with: npx -p hackchat-server config"
+    "missingConfig": "Missing .hcserver.json, have you run: npx hc-config",
+    "badConfig": "Failed to load .hcserver.json, rebuild with: npx hc-config"
   },
   "config": {
     "configMode": "Configuration mode:",

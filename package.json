@@ -13,8 +13,8 @@
     "npm": ">= 7.0.0"
   },
   "bin": {
-    "config": "scripts/configure.js",
-    "generate": "scripts/generate.js"
+    "hc-config": "scripts/configure.js",
+    "hc-generate-cmd": "scripts/generate.js"
   },
   "scripts": {
     "cov": "c8 report",

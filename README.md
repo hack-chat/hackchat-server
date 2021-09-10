@@ -28,7 +28,7 @@ hackchat-server is a general use websocket server module designed to quickly boo
 - Simple statistics tracking
 - Multi-language support
 - Quick module boilerplate generation
-  - `npx generate`
+  - `npx hc-generate-cmd`
 
 ## Installation
 
@@ -36,7 +36,7 @@ hackchat-server is a general use websocket server module designed to quickly boo
 
 Add to your project with: `npm install hackchat-server --save`.
 
-Once installed, run: `npx config` to generate a config file, if needed.
+Once installed, run: `npx hc-config` to generate a config file, if needed.
 
 ## Example usage
 
