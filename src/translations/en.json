@@ -1,7 +1,7 @@
 {
   "errors": {
-    "missingConfig": "Missing .hcserver.json, have you run: npx hc-config",
-    "badConfig": "Failed to load .hcserver.json, rebuild with: npx hc-config"
+    "missingConfig": "Missing config file. Verify the config file name (configPath) or run: npx hc-config",
+    "badConfig": "Failed to load .hcserver.json. Verify the config file name (configPath) or rebuild with: npx hc-config"
   },
   "config": {
     "configMode": "Configuration mode:",

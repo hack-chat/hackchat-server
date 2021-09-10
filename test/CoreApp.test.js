@@ -51,7 +51,7 @@ describe('Checking Core App', () => {
 
     coreApp.i18n = await coreApp.loadLanguage();
 
-    await expectThrowsAsync(() => coreApp.loadConfig(), 'Missing .hcserver.json, have you run:');
+    await expectThrowsAsync(() => coreApp.loadConfig(), 'Missing config file');
   });
 
   it('should throw an error on failing to load the config file', async () => {

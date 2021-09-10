@@ -48,10 +48,10 @@ class ImportsManager {
   gatherFiles(startPath, filter){
     let out = [];
 
-    var files = readdirSync(startPath);
-    for(var i = 0; i < files.length; i++) {
-      var filename = join(startPath, files[i]);
-      var stat = lstatSync(filename);
+    let files = readdirSync(startPath);
+    for(let i = 0; i < files.length; i++) {
+      let filename = join(startPath, files[i]);
+      let stat = lstatSync(filename);
       if (stat.isDirectory()){
         out = out.concat(this.gatherFiles(filename, filter));
       } else if (filename.indexOf(filter) >= 0) {

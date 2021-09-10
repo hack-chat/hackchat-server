@@ -15,8 +15,8 @@
 - [Installation](#installation)
 - [Example Usage](#example-usage)
 - [Links](#links)
+- [Languages](#languages)
 - [Contributing](#contributing)
-- [Help](#help)
 
 ## About
 
@@ -60,6 +60,18 @@ server.init();
 - [Contributors](https://github.com/hack-chat/main/graphs/contributors) :heart:
 - [Legacy Contributors](https://github.com/AndrewBelt/hack.chat/graphs/contributors) :heart:
 
+## Languages
+
+Currently supported:
+
+- English (en): [src/translations/en.json](src/translations/en.json)
+
 ## Contributing
+
+**Languages:**
+
+After forking & cloning this repo, navigate to the [src/translations](src/translations) directory. Duplicate the `en.json` file. What you name the duplicate json file is fairly important, highly suggest that you use the two-letter [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) abbreviations. The new language file will then be used by the `lang` property passed to the server, or by the `--lang` argument on the npx scripts.
+
+**Issues:**
 
 Before creating an issue, please ensure that it hasn't already been reported/suggested, and double-check the [documentation](https://github.com/hack-chat/hackchat-server).
