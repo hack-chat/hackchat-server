@@ -14,7 +14,8 @@
   },
   "bin": {
     "hc-config": "scripts/configure.js",
-    "hc-generate-cmd": "scripts/generate.js"
+    "hc-generate-cmd": "scripts/generate.js",
+    "hc-import": "scripts/import.js"
   },
   "scripts": {
     "cov": "c8 report",

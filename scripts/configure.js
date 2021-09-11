@@ -10,32 +10,15 @@
 
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { dirname, sep } from 'path';
-import { fileURLToPath } from 'url';
+import { sep } from 'path';
 
 import enquirerPkg from 'enquirer';
 const { prompt, Select, Confirm } = enquirerPkg;
 
 import pkg from 'fs-extra';
-const { pathExists, readJson, writeJson, mkdirSync } = pkg;
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const { pathExists, writeJson, mkdirSync } = pkg;
 
-// Load and return target language
-const loadLanguage = async (lang) => {
-  let langPath = `${dirname(__dirname)}${sep}src${sep}translations${sep}${lang}.json`;
-  const exists = await pathExists(langPath);
-
-  if (exists === false) {
-    throw new Error(`Cannot find translation file: ${langPath}`);
-  }
-
-  try {
-    return await readJson(langPath);
-  } catch (err) {
-    throw new Error(`Error loading translation file: ${langPath}\n${err}`);
-  }
-}
+import i18n from './util/i18n.js';
 
 // Compile and return the list of questions using the language data
 const buildQuestions = (i18n, advancedMode) => {
@@ -152,38 +135,30 @@ const createModulesDirectory = async (path, i18n) => {
   }
 }
 
-// Ask which standard modules should be automagically imported
-const importStandardModules = async (path, i18n) => {
-  /**
-    * @todo Actually, this might just end up as it's own script
-    */
-}
-
 // Script main
 const start = async () => {
   const argv = yargs(hideBin(process.argv)).argv;
   const targetLang = argv.lang || 'en';
 
-  const i18n = await loadLanguage(targetLang);
+  const i18nStrings = await i18n.getLanguage(targetLang);
 
   const modePrompt = new Select({
     name: 'mode',
-    message: i18n.config.configMode,
+    message: i18nStrings.config.configMode,
     choices: [
-      i18n.config.configModeSimple,
-      i18n.config.configModeAdvanced,
+      i18nStrings.config.configModeSimple,
+      i18nStrings.config.configModeAdvanced,
     ],
   });
 
   const mode = await modePrompt.run();
-  const advancedMode = mode === i18n.config.configModeAdvanced ? false : true;
+  const advancedMode = mode === i18nStrings.config.configModeAdvanced ? false : true;
 
-  const questions = buildQuestions(i18n.config, advancedMode);
+  const questions = buildQuestions(i18nStrings.config, advancedMode);
   const answers = await prompt(questions);
 
-  await finalize(i18n.config, answers);
-  await createModulesDirectory(answers.modulesPath, i18n.config);
-  await importStandardModules(answers.modulesPath, i18n.config);
+  await finalize(i18nStrings.config, answers);
+  await createModulesDirectory(answers.modulesPath, i18nStrings.config);
 }
 
 // Start script

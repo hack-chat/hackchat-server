@@ -10,35 +10,18 @@
 
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { dirname, sep } from 'path';
-import { fileURLToPath } from 'url';
+import { sep } from 'path';
 
 import enquirerPkg from 'enquirer';
 const { Input, Select, Confirm } = enquirerPkg;
 
 import pkg from 'fs-extra';
 const { pathExists, readJson, writeFileSync, mkdirSync } = pkg;
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+
+import i18n from './util/i18n.js';
 
 let currentConfig = false;
 let debugMode = false;
-
-// Load and return target language
-const loadLanguage = async (lang) => {
-  let langPath = `${dirname(__dirname)}${sep}src${sep}translations${sep}${lang}.json`;
-  const exists = await pathExists(langPath);
-
-  if (exists === false) {
-    throw new Error(`Cannot find translation file: ${langPath}`);
-  }
-
-  try {
-    return await readJson(langPath);
-  } catch (err) {
-    throw new Error(`Error loading translation file: ${langPath}\n${err}`);
-  }
-}
 
 const loadConfig = async (configFile, i18n) => {
   let cfgPath = `${process.cwd()}${debugMode ? `${sep}..` : ''}${sep}${configFile}`;
@@ -384,14 +367,14 @@ const start = async () => {
   const targetLang = argv.lang || 'en';
   const configFile = argv.conf || '.hcserver.json';
 
-  const i18n = await loadLanguage(targetLang);
-  currentConfig = await loadConfig(configFile, i18n);
+  const i18nStrings = await i18n.getLanguage(targetLang);
+  currentConfig = await loadConfig(configFile, i18nStrings);
 
   const outputModule = {
-    commandName: i18n.generate.requiredText,
+    commandName: i18nStrings.generate.requiredText,
     category: '""',
     info: {
-      name: i18n.generate.requiredText,
+      name: i18nStrings.generate.requiredText,
       description: '""',
       usage: '""',
     },
@@ -400,7 +383,7 @@ const start = async () => {
     requireInit: false,
   }
 
-  showMainMenu(outputModule, i18n.generate);
+  showMainMenu(outputModule, i18nStrings.generate);
 }
 
 // Start script
