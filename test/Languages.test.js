@@ -45,12 +45,16 @@ const testLanguages = async () => {
         expect(imported.errors).to.be.a('object');
       });
 
-      it('should contain an "config" object', () => {
+      it('should contain a "config" object', () => {
         expect(imported.config).to.be.a('object');
       });
 
-      it('should contain an "generate" object', () => {
+      it('should contain a "generate" object', () => {
         expect(imported.generate).to.be.a('object');
+      });
+
+      it('should contain an "import" object', () => {
+        expect(imported.import).to.be.a('object');
       });
 
       // Errors container
@@ -259,6 +263,40 @@ const testLanguages = async () => {
 
       it('should contain an "generate.writeSuccess" string', () => {
         expect(imported.generate.writeSuccess).to.be.a('string');
+      });
+
+      // Import container
+
+      it('should contain an "import.importMode" string', () => {
+        expect(imported.import.importMode).to.be.a('string');
+      });
+
+      it('should contain an "import.importAllLabel" string', () => {
+        expect(imported.import.importAllLabel).to.be.a('string');
+      });
+
+      it('should contain an "import.importSomeLabel" string', () => {
+        expect(imported.import.importSomeLabel).to.be.a('string');
+      });
+
+      it('should contain an "import.importRemoteLabel" string', () => {
+        expect(imported.import.importRemoteLabel).to.be.a('string');
+      });
+
+      it('should contain an "import.somePrompt" string', () => {
+        expect(imported.import.somePrompt).to.be.a('string');
+      });
+
+      it('should contain an "import.goodImport" string', () => {
+        expect(imported.import.goodImport).to.be.a('string');
+      });
+
+      it('should contain an "import.failedImport" string', () => {
+        expect(imported.import.failedImport).to.be.a('string');
+      });
+
+      it('should contain an "import.missingFeature" string', () => {
+        expect(imported.import.missingFeature).to.be.a('string');
       });
     });
   }

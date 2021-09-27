@@ -157,7 +157,7 @@ export const requiredData = ['${outputModule.requiredData.join("', '")}'];\n\n`;
 export const info = {
   name: '${outputModule.info.name}',
   description: '${outputModule.info.description}',
-  usage: \`${outputModule.info.usage}\`,
+  usage: \`${outputModule.info.usage === '""' ? '' : outputModule.info.usage}\`,
 };`;
 
   return moduleString;

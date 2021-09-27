@@ -55,5 +55,15 @@
     "inputInit": "Does your app need to be initialized when the server starts?",
     "existsWarning": "File already exists, overwrite?",
     "writeSuccess": "Module file created!"
+  },
+  "import": {
+    "importMode": "How do you want to import?",
+    "importAllLabel": "Import all standard modules",
+    "importSomeLabel": "Choose standard modules",
+    "importRemoteLabel": "Import from remote url",
+    "somePrompt": "Which modules?",
+    "goodImport": "Imported all modules!",
+    "failedImport": "Error importing modules!",
+    "missingFeature": "Feature missing, try a newer version"
   }
 }
