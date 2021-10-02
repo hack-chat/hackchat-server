@@ -115,7 +115,7 @@ const start = async () => {
         moduleChoices.push({
           name: standardModules[i].split(`standard_modules${sep}`)[1],
           value: standardModules[i],
-        })
+        });
       }
 
       const targetPrompt = new MultiSelect({

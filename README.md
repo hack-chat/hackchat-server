@@ -26,6 +26,8 @@ hackchat-server is a general use websocket server module designed to quickly boo
   - Update code without losing current connections
 - Built in ratelimiting & ip ban
 - Simple statistics tracking
+- Self documenting [*](#standard-modules)
+- Session recovery [*](#standard-modules)
 - Multi-language support
 - Quick module boilerplate generation
   - `npx hc-generate-cmd`
@@ -34,9 +36,16 @@ hackchat-server is a general use websocket server module designed to quickly boo
 
 **Node.js (version 14.0) or newer is required.**
 
-Add to your project with: `npm install hackchat-server --save`.
+Add to your project with `npm install hackchat-server --save`.
 
-Once installed, run: `npx hc-config` to generate a config file, if needed.
+Once installed, run `npx hc-config` to generate a config file. Skip this step if you are using an existing config file.
+
+Next, you may choose to run `npx hc-import` and import the [standard modules](#standard-modules). You should, at minimum, import the internal/* modules, unless you're working with existing command module files.
+The hc-import script will accept a `--remote` argument to import remote command modules, like `npx hc-import --remote=https://github.com/someUser/command-modules.git`. (Note: currently this feature is unavailable)
+
+Or use `npx hc-generate-cmd` to quickly generate boilerplate modules.
+
+All `hc-config`, `hc-import` & `hc-generate-cmd` scripts support multiple languages via the `--lang` argument. See example values in [languages section](#languages). Example: `hc-generate-cmd --lang=fr`
 
 ## Example usage
 
@@ -51,6 +60,19 @@ const server = new CoreApp({
 
 server.init();
 ```
+
+## Standard Modules
+
+1) `internal\disconnect.js`
+CLient disconnection event handler
+2) `internal\socketreply.js`
+Client error/warn event handler
+3) `remote\session.js`
+Standard remote session handler
+4) `utility\help.js`
+Self documentation module
+5) `utility\reload.js`
+Command hot reloader module
 
 ## Links
 
