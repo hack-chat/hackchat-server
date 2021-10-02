@@ -1,6 +1,6 @@
 {
   "name": "hackchat-server",
-  "version": "2.2.25",
+  "version": "2.2.26",
   "description": "A module-based websocket relay server",
   "main": "index.js",
   "type": "module",
