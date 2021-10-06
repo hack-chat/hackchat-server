@@ -20,10 +20,10 @@ const CertLocation = './cert.key';
  */
 export async function run({ core, server, socket, payload }) {
   let restored = false;
-  let session = false
+  let session = false;
   socket.session = false;
 
-  if (typeof payload.jwt === undefined) {
+  if (typeof payload.jwt === 'undefined') {
     return server.reply({
       cmd: 'error',
       text: 'Invalid jwt',
