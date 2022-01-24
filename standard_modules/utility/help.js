@@ -72,6 +72,7 @@ export async function run({
   */
 export const info = {
   name: 'help',
+  category: 'utility',
   description: 'This will deliver auto-compiled module help info to a remote user',
   usage: `API: { cmd: 'help', command: '<optional command name>' }`,
 };

@@ -52,6 +52,7 @@ export async function run({
   */
 export const info = {
   name: 'reload',
+  category: 'utility',
   description: 'Allows a remote user to clear and re-import the server command modules',
   usage: 'API: { cmd: \'reload\' }',
 };

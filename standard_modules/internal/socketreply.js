@@ -43,6 +43,7 @@ export const requiredData = ['cmdKey', 'text'];
   */
 export const info = {
   name: 'socketreply',
+  category: 'internal',
   description: 'Internally used to relay warnings to clients',
   usage: 'Internal Use Only',
 };

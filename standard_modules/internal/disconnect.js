@@ -46,6 +46,7 @@ export const requiredData = ['cmdKey'];
   */
 export const info = {
   name: 'disconnect',
+  category: 'internal',
   description: 'Internally used to relay disconnect events to clients',
   usage: 'Internal Use Only',
 };

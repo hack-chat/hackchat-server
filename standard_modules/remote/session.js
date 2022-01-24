@@ -85,6 +85,7 @@ export function init(core) {
   */
 export const info = {
   name: 'session',
+  category: 'remote',
   description: 'Restore previous state by session id or return new session id',
   usage: `API: { cmd: 'session', id: '<previous session>' }`,
 };
