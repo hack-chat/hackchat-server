@@ -156,6 +156,7 @@ export const requiredData = ['${outputModule.requiredData.join("', '")}'];\n\n`;
   */
 export const info = {
   name: '${outputModule.info.name}',
+  category: '${outputModule.category}',
   description: '${outputModule.info.description}',
   usage: \`${outputModule.info.usage === '""' ? '' : outputModule.info.usage}\`,
 };`;
