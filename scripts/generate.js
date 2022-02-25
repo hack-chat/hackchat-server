@@ -151,6 +151,7 @@ export const requiredData = ['${outputModule.requiredData.join("', '")}'];\n\n`;
   * @public
   * @typedef {Object} ${outputModule.info.name}/info
   * @property {string} name - Module command name
+  * @property {string} category - Module category name
   * @property {string} description - Information about module
   * @property {string} usage - Information about module usage
   */
