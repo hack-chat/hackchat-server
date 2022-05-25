@@ -21,8 +21,7 @@ export async function run({
     */
 
   // do command reload and store results
-  let loadResult = core.dynamicImports.reloadDirCache();
-  loadResult += core.commands.loadCommands();
+  let loadResult = await core.commands.reloadCommands();
 
   // clear and rebuild all module hooks
   server.loadHooks();
