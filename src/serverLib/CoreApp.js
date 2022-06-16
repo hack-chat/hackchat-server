@@ -60,7 +60,7 @@ class CoreApp {
     this.i18n = await this.loadLanguage();
     this.config = await this.loadConfig();
 
-    this.buildCommandsManager();
+    await this.buildCommandsManager();
     this.buildStatsManager();
     this.buildMainServer();
   }
@@ -110,9 +110,9 @@ class CoreApp {
     * @private
     * @return {void}
     */
-  buildCommandsManager() {
+  async buildCommandsManager() {
     this.commands = new CommandManager(this, `${resolve(this.config.modulesPath)}${sep}`);
-    this.commands.loadCommands();
+    await this.commands.loadCommands();
   }
 
   /**
