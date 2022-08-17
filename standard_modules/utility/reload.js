@@ -16,9 +16,12 @@ export async function run({
   core, server, socket,
 }) {
   /**
-    * ADD USER VERIFICATION HERE
+    * TODO: ADD PROPER USER VERIFICATION.
     * NOT EVERY USER SHOULD BE ABLE TO RUN THIS MODULE!
     */
+   if (socket.level < 999999) {
+    return server.police.frisk(socket.address, 10);
+  }
 
   // do command reload and store results
   let loadResult = await core.commands.reloadCommands();
