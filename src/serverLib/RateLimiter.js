@@ -60,16 +60,20 @@ class RateLimiter {
 
   /**
     * Adjusts the current ratelimit score by `deltaScore`
-    * @param {String} id target id / address
+    * @param {String} socket connection to patdown
     * @param {Number} deltaScore amount to adjust current score by
     * @example
     * // Penalize by 1 and store if connection is ratelimited or not
-    * let isLimited = police.frisk(socket.address, 1);
+    * let isLimited = police.frisk(socket, 1);
     * @public
     * @return {Boolean} True if record threshold has been exceeded
     */
-  frisk(id, deltaScore) {
-    const record = this.search(id);
+  frisk(socket, deltaScore) {
+    if (typeof socket.ratelimitImmune !== 'undefined' && socket.ratelimitImmune === true) {
+      return false;
+    }
+
+    const record = this.search(socket.address);
 
     if (record.arrested) {
       return true;

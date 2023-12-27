@@ -33,7 +33,7 @@ describe('Checking Rate Limiter', () => {
     const rateLimiter = new RateLimiter(rateLimit);
     rateLimiter.arrest('test', 'test');
 
-    expect(rateLimiter.frisk('test', 0)).to.equal(true);
+    expect(rateLimiter.frisk({ address: 'test' }, 0)).to.equal(true);
   });
 
   it('should pardon a record', () => {
@@ -50,5 +50,13 @@ describe('Checking Rate Limiter', () => {
     rateLimiter.clear();
 
     expect(rateLimiter.frisk('test', 0)).to.equal(false);
+  });
+
+  it('should not ratelimit sockets with ratelimitImmune prop', () => {
+    const rateLimiter = new RateLimiter(rateLimit);
+    rateLimiter.arrest('test', 'test');
+    rateLimiter.clear();
+
+    expect(rateLimiter.frisk({ address: 'test', ratelimitImmune: true }, 0)).to.equal(false);
   });
 });

@@ -149,7 +149,7 @@ class MainServer extends WebSocketServer {
     */
   handleData(socket, data) {
     // Don't penalize yet, but check whether IP is rate-limited
-    if (this.police.frisk(socket.address, 0)) {
+    if (this.police.frisk(socket, 0)) {
       this.core.commands.handleCommand(this, socket, {
         cmd: 'socketreply',
         cmdKey: this.cmdKey,
@@ -160,7 +160,7 @@ class MainServer extends WebSocketServer {
     }
 
     // Penalize here, but don't do anything about it
-    this.police.frisk(socket.address, 1);
+    this.police.frisk(socket, 1);
 
     // Ignore ridiculously large packets
     if (data.length > 65536) {
