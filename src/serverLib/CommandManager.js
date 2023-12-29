@@ -1,4 +1,6 @@
 /* eslint no-console: 0 */
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 
 import { basename } from 'path';
 import didYouMean from 'didyoumean2';
@@ -130,6 +132,11 @@ class CommandManager {
         return errText;
       }
     }
+
+    const fileBuffer = readFileSync(file);
+    const hashSum = createHash('sha256');
+    hashSum.update(fileBuffer);
+    command.info.srcHash = hashSum.digest('hex');
 
     this.commands.push(command);
 

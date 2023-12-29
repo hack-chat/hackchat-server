@@ -80,7 +80,7 @@ class ImportsManager {
       try {
         imported = await import(`file://${files[i]}`);
 
-        this.imports[files[i]] = imported;
+        this.imports[`${this.basePath}${relative(dir, files[i])}`] = imported;
       } catch (e) {
         const err = `Unable to load module ${relative(dir, files[i])}\n${e}`;
         errorText += err;
