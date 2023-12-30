@@ -14,14 +14,14 @@ describe('Checking Command Manager', () => {
   });
 
   it('should load required commands', async () => {
-    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands`);
+    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands${sep}`);
     const errors = await commandManager.loadCommands();
 
     expect(errors).to.equal('');
   });
 
   it('should reload required commands', async () => {
-    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands`);
+    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands${sep}`);
     await commandManager.loadCommands();
     const origVerif = commandManager.commands[0].reloadVerif;
 
@@ -32,28 +32,28 @@ describe('Checking Command Manager', () => {
   });
 
   it('should return errors as a string on load', async () => {
-    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}badCommands`);
+    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}badCommands${sep}`);
     const errors = await commandManager.loadCommands();
 
     expect(errors).to.have.string('Unable');
   });
 
   it('should return errors as a string on reload', async () => {
-    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}badCommands`);
+    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}badCommands${sep}`);
     const errors = await commandManager.reloadCommands();
 
     expect(errors).to.have.string('Unable');
   });
 
   it('should alert verification issues', async () => {
-    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}faultyCommands`);
+    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}faultyCommands${sep}`);
     const errors = await commandManager.loadCommands();
 
     expect(errors).to.have.string('Failed to load command module');
   });
 
   it('should get all commands', async () => {
-    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands`);
+    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands${sep}`);
     await commandManager.loadCommands();
     
     const commands = commandManager.all();
@@ -62,7 +62,7 @@ describe('Checking Command Manager', () => {
   });
 
   it('should get all commands filtered by category', async () => {
-    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands`);
+    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands${sep}`);
     await commandManager.loadCommands();
     
     const commands = commandManager.all('core');
@@ -71,28 +71,28 @@ describe('Checking Command Manager', () => {
   });
 
   it('should get all categories', async () => {
-    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands`);
+    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands${sep}`);
     await commandManager.loadCommands();
 
     expect(commandManager.categoriesList[0]).to.have.string('core');
   });
 
   it('should find a command by name', async () => {
-    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands`);
+    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands${sep}`);
     await commandManager.loadCommands();
 
     expect(commandManager.get('echo').info.name).to.have.string('echo');
   });
 
   it('should find a command by alias', async () => {
-    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands`);
+    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands${sep}`);
     await commandManager.loadCommands();
 
     expect(commandManager.get('the_command').info.name).to.have.string('echo');
   });
 
   it('should initialize all hooks', async () => {
-    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands`);
+    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands${sep}`);
     await commandManager.loadCommands();
     commandManager.initCommandHooks({});
     
@@ -100,7 +100,7 @@ describe('Checking Command Manager', () => {
   });
   
   it('should execute command by name', async () => {
-    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands`);
+    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands${sep}`);
     await commandManager.loadCommands();
     const ret = await commandManager.handleCommand({}, {}, {
       cmd: 'echo',
@@ -111,7 +111,7 @@ describe('Checking Command Manager', () => {
   });
 
   it('should handle bad command names', async () => {
-    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands`);
+    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands${sep}`);
     await commandManager.loadCommands();
     const ret = await commandManager.handleCommand({}, {}, {
       cmd: '404_unicorn',
@@ -122,7 +122,7 @@ describe('Checking Command Manager', () => {
   });
 
   it('should suggest closely named commands', async () => {
-    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands`);
+    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands${sep}`);
     await commandManager.loadCommands();
     const ret = await commandManager.handleCommand({}, {}, {
       cmd: 'ech',
@@ -133,7 +133,7 @@ describe('Checking Command Manager', () => {
   });
 
   it('should validate required command params', async () => {
-    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands`);
+    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands${sep}`);
     await commandManager.loadCommands();
     const ret = await commandManager.handleCommand({}, {}, {
       cmd: 'zetacmd',
@@ -144,7 +144,7 @@ describe('Checking Command Manager', () => {
   });
   
   it('should verbosely inform about failed commands', async () => {
-    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands`);
+    const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands${sep}`);
     await commandManager.loadCommands();
     const ret = await commandManager.handleCommand({}, {}, {
       cmd: 'fail',
@@ -160,7 +160,7 @@ describe('Checking Command Manager', () => {
       },
     }
 
-    const commandManager = new CommandManager(nonverboseCore, `${resolve()}${sep}test${sep}testCommands`);
+    const commandManager = new CommandManager(nonverboseCore, `${resolve()}${sep}test${sep}testCommands${sep}`);
     await commandManager.loadCommands();
     const ret = await commandManager.handleCommand({}, {}, {
       cmd: 'fail',
