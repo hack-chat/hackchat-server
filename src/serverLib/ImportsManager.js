@@ -10,7 +10,7 @@ const { existsSync, readdirSync, lstatSync, renameSync } = pkg;
   * @property {String} base - Base path that all imports are required in from
   * @author Marzavec ( https://github.com/marzavec )
   * @version v2.0.0
-  * @license WTFPL ( http://www.wtfpl.net/txt/copying/ )
+  * @license MIT
   */
 class ImportsManager {
   /**
@@ -108,9 +108,15 @@ class ImportsManager {
     const tempImports = `${this.basePath.substr(0, this.basePath.length - 1)}.${Math.random().toString(36).substring(7)}`;
     renameSync(this.basePath, tempImports);
 
-    errorText += await this.loadDir(tempImports);
-
-    renameSync(tempImports, this.basePath);
+    try {
+      errorText += await this.loadDir(tempImports);
+    } catch (err) {
+      errorText += `Critical error during module load: ${err}\n`;
+    } finally {
+      if (existsSync(tempImports)) {
+        renameSync(tempImports, this.basePath);
+      }
+    }
 
     if (errorText !== '') {
       return errorText;

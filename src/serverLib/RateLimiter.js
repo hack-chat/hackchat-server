@@ -5,7 +5,7 @@
   * @author Marzavec ( https://github.com/marzavec )
   * @author Andrew Belt ( https://github.com/AndrewBelt )
   * @version v2.0.0
-  * @license WTFPL ( http://www.wtfpl.net/txt/copying/ )
+  * @license MIT
   */
 class RateLimiter {
   /**

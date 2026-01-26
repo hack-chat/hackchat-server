@@ -21,7 +21,7 @@ const mockCore = {
         server.registerHook('in', 'echo', () => {
           return false;
         });
-    
+
         server.registerHook('out', 'echo', () => {
           return false;
         });
@@ -82,7 +82,7 @@ describe('Checking Main Server', () => {
 
   it('should reject malformed json', () => {
     resetEnv();
-    
+
     const ws = new Ws('ws://127.0.0.1:6060');
     ws.onopen = () => {
       ws.send('KillMe');
@@ -95,7 +95,7 @@ describe('Checking Main Server', () => {
 
   it('should handle socket errors', () => {
     resetEnv();
-    
+
     const ws = new Ws('ws://127.0.0.1:6060');
 
     ws.onopen = () => {
@@ -110,7 +110,7 @@ describe('Checking Main Server', () => {
 
   it('should observe ratelimiting', () => {
     resetEnv();
-    
+
     const ws = new Ws('ws://127.0.0.1:6060');
 
     ws.onopen = () => {
@@ -132,7 +132,7 @@ describe('Checking Main Server', () => {
 
   it('should ignore data larger than 65536', () => {
     // resetEnv();
-    
+
     const ws = new Ws('ws://127.0.0.1:6060');
 
     ws.onopen = () => {
@@ -155,7 +155,7 @@ describe('Checking Main Server', () => {
 
   it('should reject command if its not a string', () => {
     resetEnv();
-    
+
     const ws = new Ws('ws://127.0.0.1:6060');
 
     ws.onopen = () => {
@@ -177,7 +177,7 @@ describe('Checking Main Server', () => {
 
   it('should reject command if its a builtin', () => {
     resetEnv();
-    
+
     const ws = new Ws('ws://127.0.0.1:6060');
 
     ws.onopen = () => {
@@ -200,7 +200,7 @@ describe('Checking Main Server', () => {
   it('should report in-hook errors', () => {
     resetEnv();
     mainServer.clearHooks();
-    
+
     mainServer.registerHook('in', 'echo', () => {
       throw new Error('This error is meant to occur, please ignore');
     });
@@ -250,7 +250,7 @@ describe('Checking Main Server', () => {
 
   it('should send data to target socket', () => {
     resetEnv();
-    
+
     const ws = new Ws('ws://127.0.0.1:6060');
 
     ws.onopen = () => {
@@ -267,11 +267,11 @@ describe('Checking Main Server', () => {
       expect(msg.data).to.have.string('Simulated send');
     }
   });
-  
+
   it('should report out-hook errors', () => {
     resetEnv();
     mainServer.clearHooks();
-    
+
     mainServer.registerHook('out', 'echo', () => {
       throw new Error('This error is meant to occur, please ignore');
     });
@@ -281,7 +281,7 @@ describe('Checking Main Server', () => {
     ws.onopen = () => {
       const targetSockets = mainServer.findSockets({});
       const targetSocket = targetSockets[targetSockets.length - 1];
-      
+
       mainServer.send({
         cmd: 'echo',
         text: 'Simulated send',
@@ -359,7 +359,7 @@ describe('Checking Main Server', () => {
   it('should allow hooks to alter the payloads', () => {
     resetEnv();
     mainServer.clearHooks();
-    
+
     mainServer.registerHook('in', 'echo', ({ payload }) => {
       payload.text = 'Unit tests should be a violation of the geneva convention';
       return payload;
@@ -537,5 +537,114 @@ describe('Checking Main Server', () => {
       mainServer.clearHooks();
       expect(msg.data).to.have.string('hate unit tests');
     }
+  });
+
+  it('should ignore blacklisted commands', (done) => {
+    resetEnv();
+    mainServer.cmdBlacklist = { 'forbidden': true };
+
+    const ws = new Ws('ws://127.0.0.1:6060');
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ cmd: 'forbidden', text: 'fail' }));
+      ws.send(JSON.stringify({ cmd: 'echo', text: 'pass' }));
+    };
+
+    ws.onmessage = (msg) => {
+      const data = JSON.parse(msg.data);
+      if (data.cmd === 'forbidden') {
+        done(new Error('Blacklisted command was executed'));
+      } else if (data.text === 'pass') {
+        mainServer.cmdBlacklist = {};
+        ws.close();
+        done();
+      }
+    };
+  });
+
+  it('should bypass hooks for unrelated commands', (done) => {
+    resetEnv();
+    mainServer.clearHooks();
+    mainServer.registerHook('in', 'dummy_cmd', () => false);
+
+    const ws = new Ws('ws://127.0.0.1:6060');
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ cmd: 'echo', text: 'bypass' }));
+    };
+
+    ws.onmessage = (msg) => {
+      const data = JSON.parse(msg.data);
+      expect(data.text).to.equal('bypass');
+      ws.close();
+      done();
+    };
+  });
+
+  it('should filter sockets using a nested function property', () => {
+    const client1 = { address: '127.0.0.1', readyState: 1 };
+    const client2 = { address: '192.168.1.1', readyState: 1 };
+    mainServer.clients.add(client1);
+    mainServer.clients.add(client2);
+
+    const matches = mainServer.findSockets({
+      address: (addr) => addr.startsWith('127')
+    });
+
+    expect(matches).to.have.lengthOf(1);
+    expect(matches[0].address).to.equal('127.0.0.1');
+
+    mainServer.clients.delete(client1);
+    mainServer.clients.delete(client2);
+  });
+
+  it('should stop processing if an incoming hook returns false', (done) => {
+    resetEnv();
+    mainServer.clearHooks();
+
+    mainServer.registerHook('in', 'suppress_me', () => {
+      return false;
+    });
+
+    const ws = new Ws('ws://127.0.0.1:6060');
+
+    ws.onopen = () => {
+      ws.send(JSON.stringify({
+        cmd: 'suppress_me',
+        text: 'This should not be echoed',
+      }));
+
+      ws.send(JSON.stringify({
+        cmd: 'echo',
+        text: 'Control',
+      }));
+    };
+
+    ws.onmessage = (msg) => {
+      const data = JSON.parse(msg.data);
+
+      if (data.cmd === 'suppress_me') {
+        done(new Error('Incoming hook failed to suppress command processing'));
+      } else if (data.text === 'Control') {
+        mainServer.clearHooks();
+        ws.close();
+        done();
+      }
+    };
+  });
+
+  it('should find sockets using a top-level filter function', () => {
+    const mockClientA = { uniqueId: 101, readyState: 1 };
+    const mockClientB = { uniqueId: 102, readyState: 1 };
+    
+    mainServer.clients.add(mockClientA);
+    mainServer.clients.add(mockClientB);
+
+    const matches = mainServer.findSockets((socket) => socket.uniqueId === 101);
+
+    expect(matches).to.be.an('array');
+    expect(matches).to.have.lengthOf(1);
+    expect(matches[0].uniqueId).to.equal(101);
+
+    mainServer.clients.delete(mockClientA);
+    mainServer.clients.delete(mockClientB);
   });
 });

@@ -55,7 +55,7 @@ describe('Checking Command Manager', () => {
   it('should get all commands', async () => {
     const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands${sep}`);
     await commandManager.loadCommands();
-    
+
     const commands = commandManager.all();
 
     expect(commands[0].info.category).to.have.string('core');
@@ -64,7 +64,7 @@ describe('Checking Command Manager', () => {
   it('should get all commands filtered by category', async () => {
     const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands${sep}`);
     await commandManager.loadCommands();
-    
+
     const commands = commandManager.all('core');
 
     expect(commands[0].info.category).to.have.string('core');
@@ -95,10 +95,10 @@ describe('Checking Command Manager', () => {
     const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands${sep}`);
     await commandManager.loadCommands();
     commandManager.initCommandHooks({});
-    
+
     expect(commandManager.get('echo').info.initialized).to.equal(true);
   });
-  
+
   it('should execute command by name', async () => {
     const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands${sep}`);
     await commandManager.loadCommands();
@@ -142,7 +142,7 @@ describe('Checking Command Manager', () => {
 
     expect(ret).to.equal(null);
   });
-  
+
   it('should verbosely inform about failed commands', async () => {
     const commandManager = new CommandManager(mockCore, `${resolve()}${sep}test${sep}testCommands${sep}`);
     await commandManager.loadCommands();

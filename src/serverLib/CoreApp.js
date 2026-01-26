@@ -24,7 +24,7 @@ const __dirname = dirname(__filename);
   * @property {MainServer} server Main websocket server reference
   * @author Marzavec ( https://github.com/marzavec )
   * @version v2.2.0
-  * @license WTFPL ( http://www.wtfpl.net/txt/copying/ )
+  * @license MIT
   */
 class CoreApp {
   /**

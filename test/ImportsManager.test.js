@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import { resolve, sep } from 'path';
+import fs from 'fs';
 import ImportsManager from '../src/serverLib/ImportsManager.js';
 
 describe('Checking Imports Manager', () => {
@@ -44,5 +45,22 @@ describe('Checking Imports Manager', () => {
     const newVerif = commandImports[Object.keys(commandImports)[0]].reloadVerif;
 
     expect(origVerif).to.not.equal(newVerif);
+  });
+
+  it('should handle critical errors during import loading', async () => {
+    const badPath = `${resolve()}${sep}test${sep}not_a_dir`;
+    if (!fs.existsSync(badPath)) {
+      fs.writeFileSync(badPath, 'not a directory');
+    }
+
+    const importsManager = new ImportsManager(badPath);
+    const result = await importsManager.getImports();
+
+    expect(result).to.be.a('string');
+    expect(result).to.include('Critical error');
+
+    try { fs.unlinkSync(badPath); } catch(e) {
+      /* i hate unit tests so much */
+    }
   });
 });

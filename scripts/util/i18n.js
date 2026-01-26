@@ -12,7 +12,7 @@ const __dirname = dirname(__filename);
   * @property {string} lang Target language
   * @author Marzavec ( https://github.com/marzavec )
   * @version v2.0.0
-  * @license WTFPL ( http://www.wtfpl.net/txt/copying/ )
+  * @license MIT
   */
 class i18n {
   /**

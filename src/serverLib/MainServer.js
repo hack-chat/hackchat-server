@@ -11,7 +11,7 @@ import RateLimiter from './RateLimiter.js';
   * @property {String} cmdKey - Internal use command key
   * @author Marzavec ( https://github.com/marzavec )
   * @version v2.0.0
-  * @license WTFPL ( http://www.wtfpl.net/txt/copying/ )
+  * @license MIT
   */
 class MainServer extends WebSocketServer {
   /**
@@ -189,9 +189,7 @@ class MainServer extends WebSocketServer {
       return;
     }
 
-    if (typeof this.cmdBlacklist[payload.cmd] === 'function') {
-      return;
-    }
+    if (this.cmdBlacklist[payload.cmd]) { return; }
     // End @todo //
 
     // Execute `in` (incoming data) hooks and process results
@@ -272,7 +270,7 @@ class MainServer extends WebSocketServer {
 
       return;
     }
-    
+
     if (outgoingPayload === false) {
       // A hook requested this data be dropped
       return;
@@ -341,6 +339,17 @@ class MainServer extends WebSocketServer {
     * @return {Array} Clients who matched the filter requirements
     */
   findSockets(filter) {
+    if (typeof filter === 'function') {
+      const matches = [];
+      this.clients.forEach((socket) => {
+        if (filter(socket)) {
+          matches.push(socket);
+        }
+      });
+
+      return matches;
+    }
+
     const filterAttribs = Object.keys(filter);
     const reqCount = filterAttribs.length;
     let curMatch;
@@ -525,7 +534,7 @@ class MainServer extends WebSocketServer {
         return false;
       }
     }
-    
+
     return newPayload;
   }
 
